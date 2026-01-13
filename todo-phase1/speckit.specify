@@ -1,0 +1,188 @@
+# Requirements Specification
+# Hackathon Todo App - Phase I
+
+## Overview
+A simple, in-memory console-based todo list application that allows users to manage tasks through a command-line interface.
+
+## User Stories
+
+### US-1: Add New Task
+**As a** user
+**I want to** add a new task with a title and description
+**So that** I can track things I need to do
+
+**Acceptance Criteria:**
+- User can enter a task title (required)
+- User can enter a task description (required)
+- Task is assigned a unique ID automatically
+- Task is created with status "incomplete" by default
+- User sees confirmation message with task ID
+- Empty title or description should be rejected with clear error message
+
+### US-2: View All Tasks
+**As a** user
+**I want to** see all my tasks in a list
+**So that** I can review what needs to be done
+
+**Acceptance Criteria:**
+- Display all tasks in a readable format
+- Show task ID, title, description, and completion status
+- Indicate which tasks are complete vs incomplete (visual indicator)
+- Show message if no tasks exist
+- List should be easy to scan
+
+### US-3: Update Task
+**As a** user
+**I want to** update a task's title or description
+**So that** I can correct or clarify task information
+
+**Acceptance Criteria:**
+- User can select task by ID
+- User can update title, description, or both
+- Original values are shown before update
+- User can choose to keep original value unchanged
+- Confirmation shown after successful update
+- Error shown if task ID doesn't exist
+
+### US-4: Delete Task
+**As a** user
+**I want to** delete a task
+**So that** I can remove tasks I no longer need
+
+**Acceptance Criteria:**
+- User can select task by ID
+- System shows task details before deletion
+- User must confirm deletion
+- Task is permanently removed from list
+- Confirmation shown after successful deletion
+- Error shown if task ID doesn't exist
+
+### US-5: Mark Task Complete/Incomplete
+**As a** user
+**I want to** mark tasks as complete or incomplete
+**So that** I can track my progress
+
+**Acceptance Criteria:**
+- User can toggle task status by ID
+- System shows current status before toggle
+- Status changes from incomplete to complete or vice versa
+- Visual confirmation of new status
+- Error shown if task ID doesn't exist
+
+### US-6: Main Menu Navigation
+**As a** user
+**I want to** navigate through a clear menu system
+**So that** I can easily access all features
+
+**Acceptance Criteria:**
+- Main menu shows all available options
+- Each option is numbered clearly
+- User can select option by number
+- Invalid selections show helpful error message
+- User can exit the application cleanly
+- After each operation, user returns to main menu
+
+## Functional Requirements
+
+### FR-1: Task Data Model
+Each task must contain:
+- `id`: Unique integer identifier (auto-generated)
+- `title`: String (max 100 characters, required)
+- `description`: String (max 500 characters, required)
+- `completed`: Boolean (default: False)
+
+### FR-2: Task Storage
+- Tasks stored in memory (Python list or dictionary)
+- Data persists only during application runtime
+- Data is lost when application exits
+
+### FR-3: Input Validation
+- All user inputs must be validated
+- Empty or whitespace-only inputs rejected
+- Non-numeric input for ID selection rejected
+- Clear error messages for all validation failures
+
+### FR-4: User Interface
+- Console-based menu system
+- Clear prompts for user input
+- Formatted output for task lists
+- Visual distinction between complete/incomplete tasks
+- Consistent formatting throughout application
+
+### FR-5: Error Handling
+- Handle invalid menu selections
+- Handle non-existent task IDs
+- Handle invalid input types
+- No application crashes
+- All errors show helpful messages
+
+## Non-Functional Requirements
+
+### NFR-1: Performance
+- All operations complete in < 1 second
+- Instant menu navigation
+- Immediate visual feedback
+
+### NFR-2: Usability
+- No external documentation needed for basic use
+- Intuitive menu labels
+- Clear action prompts
+- Obvious way to exit
+
+### NFR-3: Maintainability
+- Clean code structure
+- Separation of UI and business logic
+- Functions with single responsibility
+- Consistent naming conventions
+
+### NFR-4: Compatibility
+- Works on Python 3.8+
+- Cross-platform (Windows, Mac, Linux)
+- No special environment setup required
+
+## Out of Scope (Future Phases)
+
+The following are explicitly OUT of scope for Phase I:
+- Persistent storage (file/database)
+- Task priorities or categories
+- Due dates or reminders
+- Search or filter functionality
+- Multi-user support
+- Web interface or API
+- Task history or audit log
+- Data export/import
+
+## Acceptance Testing Scenarios
+
+### Scenario 1: Happy Path - Complete Workflow
+1. User starts application
+2. User adds 3 tasks
+3. User views all tasks
+4. User marks task #2 as complete
+5. User updates task #1 description
+6. User deletes task #3
+7. User views all tasks (should show tasks #1 and #2)
+8. User exits application
+
+### Scenario 2: Input Validation
+1. User tries to add task with empty title → Error shown
+2. User tries to update non-existent task ID → Error shown
+3. User enters invalid menu option → Error shown
+4. User enters letter when ID expected → Error shown
+
+### Scenario 3: Edge Cases
+1. User views tasks when list is empty → Appropriate message shown
+2. User deletes all tasks → Can still add new tasks
+3. User toggles same task multiple times → Status changes each time
+
+## Definition of Done
+
+Phase I is complete when:
+- [ ] All 6 user stories implemented and tested
+- [ ] All functional requirements met
+- [ ] Application runs without crashes
+- [ ] All input validation working
+- [ ] Error messages are clear and helpful
+- [ ] Code passes all acceptance test scenarios
+- [ ] Code is clean and maintainable
+- [ ] README documents how to run the application

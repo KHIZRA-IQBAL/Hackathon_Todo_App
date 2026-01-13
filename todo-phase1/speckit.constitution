@@ -1,0 +1,72 @@
+# Project Constitution
+# Hackathon Todo App - Phase I
+
+## Core Principles
+
+### 1. Simplicity First
+- This is Phase I: Build the simplest possible working version
+- In-memory storage only (no database, no file persistence)
+- Console-based interface (no web UI, no GUI)
+- Minimal dependencies (Python standard library preferred)
+
+### 2. Data Integrity
+- Each task must have a unique identifier
+- Task state must be consistent throughout operations
+- No data loss during the runtime session
+
+### 3. User Experience
+- Clear, intuitive menu system
+- Immediate feedback for all operations
+- Graceful error handling with helpful messages
+- Easy navigation between features
+
+### 4. Code Quality
+- Clean separation of concerns (UI, business logic, data management)
+- Readable, maintainable code
+- Proper error handling
+- Clear function and variable names
+
+## Project Constraints
+
+### Technical Constraints
+- **Language**: Python 3.8+
+- **Storage**: In-memory only (data lost on exit)
+- **Interface**: Console/Terminal only
+- **Dependencies**: Minimal external dependencies
+
+### Scope Constraints - Phase I Only
+- ✅ In scope: Add, View, Update, Delete, Mark Complete/Incomplete
+- ❌ Out of scope: Persistence, multi-user, authentication, due dates, priorities, categories
+- ❌ Out of scope: Web interface, API, database
+
+### Non-Functional Requirements
+- **Performance**: Instant response for all operations (in-memory)
+- **Reliability**: No crashes, graceful error handling
+- **Usability**: Anyone should be able to use without documentation
+- **Maintainability**: Code should be easy to extend for Phase II
+
+## Design Philosophy
+
+### YAGNI (You Aren't Gonna Need It)
+- Don't add features for "future phases"
+- Don't over-engineer the architecture
+- Focus on making Phase I work perfectly
+
+### Progressive Enhancement
+- Build solid foundation that CAN be extended
+- But don't implement extension points yet
+- Phase II will add persistence, Phase III will add web interface
+
+### Fail Fast
+- Validate input immediately
+- Show clear error messages
+- Don't let invalid state propagate
+
+## Success Criteria
+
+A successful Phase I implementation:
+1. Runs without crashes
+2. Allows all CRUD operations on tasks
+3. Has clear, usable console interface
+4. Can be demonstrated in 5 minutes
+5. Code is clean enough for Phase II extension

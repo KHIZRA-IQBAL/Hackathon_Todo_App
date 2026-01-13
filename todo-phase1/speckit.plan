@@ -1,0 +1,316 @@
+# Architecture & Implementation Plan
+# Hackathon Todo App - Phase I
+
+## Architecture Overview
+
+### High-Level Architecture
+```
+┌─────────────────────────────────────┐
+│         Main Application            │
+│         (main.py)                   │
+└────────────┬────────────────────────┘
+             │
+             ├──────────────┐
+             │              │
+┌────────────▼────┐  ┌──────▼──────────┐
+│   UI Layer      │  │  Business Logic │
+│   (ui.py)       │◄─┤  (todo_manager) │
+└─────────────────┘  └─────────────────┘
+                              │
+                     ┌────────▼────────┐
+                     │   Data Layer    │
+                     │  (in-memory     │
+                     │   dictionary)   │
+                     └─────────────────┘
+```
+
+### Layer Responsibilities
+
+#### 1. Main Application (`main.py`)
+- Entry point for the application
+- Initializes TodoManager and UI
+- Runs main application loop
+- Handles graceful shutdown
+
+#### 2. UI Layer (`ui.py`)
+- Displays menus and prompts
+- Collects user input
+- Formats and displays output
+- Handles user interaction flow
+- **No business logic** - only presentation
+
+#### 3. Business Logic (`todo_manager.py`)
+- TodoManager class manages all task operations
+- Implements CRUD operations
+- Validates business rules
+- Manages task IDs
+- Maintains task storage
+- **No UI code** - only logic
+
+#### 4. Data Layer (in-memory)
+- Simple Python dictionary: `{task_id: task_object}`
+- Task represented as dictionary or dataclass
+- No database, no files (Phase I constraint)
+
+## Module Design
+
+### Module: `todo_manager.py`
+
+**Class: Task**
+```python
+@dataclass
+class Task:
+    id: int
+    title: str
+    description: str
+    completed: bool = False
+```
+
+**Class: TodoManager**
+```python
+class TodoManager:
+    def __init__(self):
+        self._tasks: Dict[int, Task] = {}
+        self._next_id: int = 1
+
+    def add_task(title: str, description: str) -> Task
+    def get_task(task_id: int) -> Optional[Task]
+    def get_all_tasks() -> List[Task]
+    def update_task(task_id: int, title: str, description: str) -> bool
+    def delete_task(task_id: int) -> bool
+    def toggle_complete(task_id: int) -> bool
+    def task_exists(task_id: int) -> bool
+```
+
+**Responsibilities:**
+- Maintain task storage (dictionary)
+- Generate unique task IDs
+- Validate task operations (ID exists, etc.)
+- Perform CRUD operations
+- Return success/failure status
+
+**Error Handling:**
+- Return None/False for invalid operations
+- Raise ValueError for invalid input data
+- Let caller (UI) handle user-facing messages
+
+### Module: `ui.py`
+
+**Class: TodoUI**
+```python
+class TodoUI:
+    def __init__(self, todo_manager: TodoManager):
+        self.todo_manager = todo_manager
+
+    def run() -> None
+    def display_menu() -> None
+    def get_menu_choice() -> int
+    def handle_add_task() -> None
+    def handle_view_tasks() -> None
+    def handle_update_task() -> None
+    def handle_delete_task() -> None
+    def handle_toggle_complete() -> None
+
+    # Helper methods
+    def get_input(prompt: str, allow_empty: bool) -> str
+    def get_task_id() -> Optional[int]
+    def display_task(task: Task) -> None
+    def display_tasks(tasks: List[Task]) -> None
+    def confirm_action(prompt: str) -> bool
+```
+
+**Responsibilities:**
+- Display all menus and prompts
+- Get and validate user input
+- Format task display (complete/incomplete indicators)
+- Show success/error messages
+- Control application flow (menu loop)
+
+**User Experience Details:**
+- Use `[✓]` for complete, `[ ]` for incomplete
+- Number menu options 1-6
+- Clear screen between operations (optional)
+- Show task count in list view
+- Confirm destructive actions (delete)
+
+### Module: `main.py`
+
+```python
+def main():
+    todo_manager = TodoManager()
+    ui = TodoUI(todo_manager)
+    ui.run()
+
+if __name__ == "__main__":
+    main()
+```
+
+**Responsibilities:**
+- Initialize components
+- Start application
+- Handle top-level exceptions
+
+## Data Flow
+
+### Example: Adding a Task
+```
+User → UI.handle_add_task()
+       │
+       ├─ Get title from user
+       ├─ Get description from user
+       │
+       └─ TodoManager.add_task(title, desc)
+          │
+          ├─ Validate inputs
+          ├─ Generate ID
+          ├─ Create Task object
+          ├─ Store in dictionary
+          │
+          └─ Return Task object
+             │
+             └─ UI displays success message
+```
+
+### Example: Viewing Tasks
+```
+User → UI.handle_view_tasks()
+       │
+       └─ TodoManager.get_all_tasks()
+          │
+          ├─ Get all tasks from dictionary
+          ├─ Convert to list
+          │
+          └─ Return List[Task]
+             │
+             └─ UI formats and displays each task
+```
+
+## Implementation Strategy
+
+### Phase 1: Core Infrastructure (Tasks CORE-1 to CORE-3)
+1. Set up project structure
+2. Create Task dataclass
+3. Create TodoManager with storage
+4. Implement ID generation
+
+### Phase 2: CRUD Operations (Tasks CRUD-1 to CRUD-5)
+1. Implement add_task
+2. Implement get_task and get_all_tasks
+3. Implement update_task
+4. Implement delete_task
+5. Implement toggle_complete
+
+### Phase 3: UI Implementation (Tasks UI-1 to UI-5)
+1. Create TodoUI class
+2. Implement menu display
+3. Implement each handler method
+4. Add input validation
+5. Add formatting and display helpers
+
+### Phase 4: Integration (Tasks INT-1 to INT-2)
+1. Wire up main.py
+2. Test complete workflows
+3. Handle edge cases
+
+### Phase 5: Polish (Tasks POL-1 to POL-2)
+1. Improve error messages
+2. Add input validation
+3. Final testing
+
+## Testing Strategy
+
+### Unit Testing Approach
+- Test TodoManager methods independently
+- Mock user input for UI testing
+- Test edge cases (empty list, invalid IDs)
+
+### Integration Testing
+- Test complete user workflows
+- Verify data consistency across operations
+- Test error handling end-to-end
+
+### Manual Testing Scenarios
+1. Add multiple tasks, verify IDs increment
+2. Update task, verify changes persist
+3. Delete task, verify it's gone
+4. Toggle task multiple times
+5. Try all invalid inputs
+6. Start with empty list, add task, delete all
+
+## Error Handling Strategy
+
+### Input Validation (UI Layer)
+- Empty strings → "Title/Description cannot be empty"
+- Non-numeric ID → "Please enter a valid number"
+- Invalid menu choice → "Please select 1-6"
+
+### Business Logic Errors (TodoManager Layer)
+- Task not found → Return None/False
+- Invalid data → Raise ValueError
+
+### User-Facing Messages (UI Layer)
+- "Task not found with ID {id}"
+- "Task added successfully! (ID: {id})"
+- "Task updated successfully"
+- "Task deleted successfully"
+- "Task marked as {complete/incomplete}"
+
+## File Structure
+
+```
+phase1-console-app/
+├── src/
+│   └── hackathon_todo/
+│       ├── __init__.py
+│       ├── main.py           # Entry point
+│       ├── todo_manager.py   # Business logic
+│       └── ui.py             # User interface
+├── tests/                    # Future: unit tests
+├── speckit.constitution      # This file
+├── speckit.specify           # Requirements
+├── speckit.plan              # Architecture (this file)
+├── speckit.tasks             # Task breakdown
+├── CLAUDE.md                 # Claude Code instructions
+├── pyproject.toml            # Project metadata
+└── README.md                 # User documentation
+```
+
+## Development Guidelines
+
+### Code Style
+- Follow PEP 8
+- Use type hints
+- Use dataclasses for Task
+- Keep functions small and focused
+- Use descriptive variable names
+
+### Naming Conventions
+- Classes: PascalCase (TodoManager, TodoUI)
+- Functions/methods: snake_case (add_task, get_all_tasks)
+- Constants: UPPER_SNAKE_CASE (if any)
+- Private attributes: _leading_underscore (_tasks, _next_id)
+
+### Documentation
+- Docstrings for all public methods
+- Type hints for all parameters and returns
+- Comments for complex logic only
+
+## Future Extensibility (Phase II Planning)
+
+While we don't implement these now, the architecture supports:
+- Adding persistence layer (swap in-memory dict with SQLite)
+- Adding task fields (due date, priority)
+- Adding filtering/sorting (add methods to TodoManager)
+- Adding categories/tags (extend Task dataclass)
+
+The separation of concerns ensures Phase II changes won't require major refactoring.
+
+## Success Metrics
+
+Implementation successful when:
+- [ ] All modules follow single responsibility principle
+- [ ] UI layer has no business logic
+- [ ] TodoManager has no UI code
+- [ ] All user stories from speckit.specify work
+- [ ] Code is clean and well-structured
+- [ ] Easy to understand and modify

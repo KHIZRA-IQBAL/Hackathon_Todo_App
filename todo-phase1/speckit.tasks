@@ -1,0 +1,294 @@
+# Task Breakdown
+# Hackathon Todo App - Phase I
+
+## Task Overview
+Total estimated tasks: 17
+Organized by implementation phase as defined in speckit.plan
+
+## Phase 1: Core Infrastructure
+
+### CORE-1: Project Structure Setup
+**Description:** Create the folder structure and initial files
+**Dependencies:** None
+**Acceptance Criteria:**
+- [ ] Create src/hackathon_todo/ directory
+- [ ] Create __init__.py (empty)
+- [ ] Create main.py (stub)
+- [ ] Create todo_manager.py (stub)
+- [ ] Create ui.py (stub)
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+### CORE-2: Implement Task Data Model
+**Description:** Create the Task dataclass with all required fields
+**Dependencies:** CORE-1
+**Files:** src/hackathon_todo/todo_manager.py
+**Acceptance Criteria:**
+- [ ] Import dataclass decorator
+- [ ] Create Task dataclass with fields: id, title, description, completed
+- [ ] Set default value for completed (False)
+- [ ] Add type hints for all fields
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+### CORE-3: Implement TodoManager Storage
+**Description:** Create TodoManager class with in-memory storage
+**Dependencies:** CORE-2
+**Files:** src/hackathon_todo/todo_manager.py
+**Acceptance Criteria:**
+- [ ] Create TodoManager class
+- [ ] Initialize _tasks dictionary (Dict[int, Task])
+- [ ] Initialize _next_id counter (starts at 1)
+- [ ] Add type hints
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+## Phase 2: CRUD Operations
+
+### CRUD-1: Implement Add Task
+**Description:** Implement add_task method in TodoManager
+**Dependencies:** CORE-3
+**Files:** src/hackathon_todo/todo_manager.py
+**Acceptance Criteria:**
+- [ ] Method signature: add_task(title: str, description: str) -> Task
+- [ ] Validate title and description are not empty/whitespace
+- [ ] Raise ValueError for invalid input
+- [ ] Generate unique ID using _next_id
+- [ ] Create Task object
+- [ ] Store in _tasks dictionary
+- [ ] Increment _next_id
+- [ ] Return created Task
+**Estimated Effort:** Medium
+**Status:** PENDING
+
+### CRUD-2: Implement Get Tasks
+**Description:** Implement methods to retrieve tasks
+**Dependencies:** CRUD-1
+**Files:** src/hackathon_todo/todo_manager.py
+**Acceptance Criteria:**
+- [ ] Implement get_task(task_id: int) -> Optional[Task]
+- [ ] Return task if exists, None otherwise
+- [ ] Implement get_all_tasks() -> List[Task]
+- [ ] Return list of all tasks (empty list if none)
+- [ ] Add type hints
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+### CRUD-3: Implement Update Task
+**Description:** Implement update_task method
+**Dependencies:** CRUD-2
+**Files:** src/hackathon_todo/todo_manager.py
+**Acceptance Criteria:**
+- [ ] Method signature: update_task(task_id: int, title: str, description: str) -> bool
+- [ ] Check if task exists
+- [ ] Validate title and description not empty
+- [ ] Update task's title and description
+- [ ] Return True on success, False if task not found
+- [ ] Raise ValueError for invalid input
+**Estimated Effort:** Medium
+**Status:** PENDING
+
+### CRUD-4: Implement Delete Task
+**Description:** Implement delete_task method
+**Dependencies:** CRUD-2
+**Files:** src/hackathon_todo/todo_manager.py
+**Acceptance Criteria:**
+- [ ] Method signature: delete_task(task_id: int) -> bool
+- [ ] Check if task exists
+- [ ] Remove task from _tasks dictionary
+- [ ] Return True on success, False if not found
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+### CRUD-5: Implement Toggle Complete
+**Description:** Implement toggle_complete method
+**Dependencies:** CRUD-2
+**Files:** src/hackathon_todo/todo_manager.py
+**Acceptance Criteria:**
+- [ ] Method signature: toggle_complete(task_id: int) -> bool
+- [ ] Check if task exists
+- [ ] Toggle task.completed (True ↔ False)
+- [ ] Return True on success, False if not found
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+## Phase 3: UI Implementation
+
+### UI-1: Implement TodoUI Class Foundation
+**Description:** Create TodoUI class with initialization and main loop
+**Dependencies:** CRUD-5 (all CRUD ops completed)
+**Files:** src/hackathon_todo/ui.py
+**Acceptance Criteria:**
+- [ ] Create TodoUI class
+- [ ] Constructor accepts TodoManager instance
+- [ ] Implement run() method with main loop
+- [ ] Loop continues until user chooses to exit
+- [ ] Handle keyboard interrupts gracefully (Ctrl+C)
+**Estimated Effort:** Medium
+**Status:** PENDING
+
+### UI-2: Implement Menu Display
+**Description:** Create menu system
+**Dependencies:** UI-1
+**Files:** src/hackathon_todo/ui.py
+**Acceptance Criteria:**
+- [ ] Implement display_menu() method
+- [ ] Show 6 options: Add, View, Update, Delete, Toggle, Exit
+- [ ] Number options 1-6
+- [ ] Clear, readable formatting
+- [ ] Implement get_menu_choice() -> int
+- [ ] Validate input is numeric 1-6
+- [ ] Show error for invalid input
+- [ ] Re-prompt on error
+**Estimated Effort:** Medium
+**Status:** PENDING
+
+### UI-3: Implement Task Display Helpers
+**Description:** Create methods to format and display tasks
+**Dependencies:** UI-2
+**Files:** src/hackathon_todo/ui.py
+**Acceptance Criteria:**
+- [ ] Implement display_task(task: Task) -> None
+- [ ] Show task ID, title, description, status
+- [ ] Use [✓] for complete, [ ] for incomplete
+- [ ] Implement display_tasks(tasks: List[Task]) -> None
+- [ ] Display all tasks in list
+- [ ] Show count of tasks
+- [ ] Show "No tasks found" if empty list
+- [ ] Readable formatting with separators
+**Estimated Effort:** Medium
+**Status:** PENDING
+
+### UI-4: Implement Input Helpers
+**Description:** Create methods for getting user input
+**Dependencies:** UI-2
+**Files:** src/hackathon_todo/ui.py
+**Acceptance Criteria:**
+- [ ] Implement get_input(prompt: str, allow_empty: bool = False) -> str
+- [ ] Strip whitespace from input
+- [ ] Reject empty input if allow_empty is False
+- [ ] Show error and re-prompt on invalid input
+- [ ] Implement get_task_id() -> Optional[int]
+- [ ] Prompt for task ID
+- [ ] Validate input is numeric
+- [ ] Return int or None if cancelled
+- [ ] Implement confirm_action(prompt: str) -> bool
+- [ ] Ask yes/no question
+- [ ] Accept y/yes/n/no (case insensitive)
+- [ ] Return boolean
+**Estimated Effort:** Medium
+**Status:** PENDING
+
+### UI-5: Implement Menu Handlers
+**Description:** Implement handler method for each menu option
+**Dependencies:** UI-3, UI-4
+**Files:** src/hackathon_todo/ui.py
+**Acceptance Criteria:**
+- [ ] Implement handle_add_task()
+  - Get title and description from user
+  - Call todo_manager.add_task()
+  - Handle ValueError, show error message
+  - Show success message with task ID
+- [ ] Implement handle_view_tasks()
+  - Get all tasks from todo_manager
+  - Call display_tasks()
+- [ ] Implement handle_update_task()
+  - Get task ID from user
+  - Show current task details
+  - Get new title and description
+  - Call todo_manager.update_task()
+  - Show success or error message
+- [ ] Implement handle_delete_task()
+  - Get task ID from user
+  - Show task details
+  - Confirm deletion
+  - Call todo_manager.delete_task()
+  - Show success or error message
+- [ ] Implement handle_toggle_complete()
+  - Get task ID from user
+  - Show current status
+  - Call todo_manager.toggle_complete()
+  - Show new status or error message
+**Estimated Effort:** Large
+**Status:** PENDING
+
+## Phase 4: Integration
+
+### INT-1: Implement Main Entry Point
+**Description:** Wire up main.py to run the application
+**Dependencies:** UI-5 (all UI completed)
+**Files:** src/hackathon_todo/main.py
+**Acceptance Criteria:**
+- [ ] Import TodoManager and TodoUI
+- [ ] Create main() function
+- [ ] Initialize TodoManager instance
+- [ ] Initialize TodoUI with TodoManager
+- [ ] Call ui.run()
+- [ ] Add if __name__ == "__main__": guard
+- [ ] Call main()
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+### INT-2: End-to-End Testing
+**Description:** Test complete workflows and fix issues
+**Dependencies:** INT-1
+**Acceptance Criteria:**
+- [ ] Test all acceptance scenarios from speckit.specify
+- [ ] Test Scenario 1: Happy Path
+- [ ] Test Scenario 2: Input Validation
+- [ ] Test Scenario 3: Edge Cases
+- [ ] Fix any bugs found
+- [ ] Verify no crashes on any input
+**Estimated Effort:** Medium
+**Status:** PENDING
+
+## Phase 5: Polish & Documentation
+
+### POL-1: Error Message Improvements
+**Description:** Review and improve all error messages
+**Dependencies:** INT-2
+**Files:** src/hackathon_todo/ui.py
+**Acceptance Criteria:**
+- [ ] All error messages are clear and actionable
+- [ ] Consistent formatting of messages
+- [ ] No technical jargon in user-facing messages
+- [ ] Help text suggests what to do
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+### POL-2: Documentation & README
+**Description:** Update README with usage instructions
+**Dependencies:** INT-2
+**Files:** README.md
+**Acceptance Criteria:**
+- [ ] Describe what the application does
+- [ ] List Phase I features
+- [ ] Provide installation instructions (if any)
+- [ ] Provide usage instructions (how to run)
+- [ ] Include example workflow
+- [ ] List requirements (Python version)
+**Estimated Effort:** Simple
+**Status:** PENDING
+
+## Task Summary by Status
+
+### PENDING (17 tasks)
+- CORE-1, CORE-2, CORE-3
+- CRUD-1, CRUD-2, CRUD-3, CRUD-4, CRUD-5
+- UI-1, UI-2, UI-3, UI-4, UI-5
+- INT-1, INT-2
+- POL-1, POL-2
+
+### IN PROGRESS (0 tasks)
+
+### COMPLETED (0 tasks)
+
+## Critical Path
+CORE-1 → CORE-2 → CORE-3 → CRUD-1 → CRUD-2 → CRUD-3/CRUD-4/CRUD-5 → UI-1 → UI-2 → UI-3/UI-4 → UI-5 → INT-1 → INT-2 → POL-1/POL-2
+
+## Notes
+- Tasks can be parallelized within same phase if dependencies allow
+- UI-3 and UI-4 can be done in parallel
+- CRUD-3, CRUD-4, CRUD-5 can be done in parallel after CRUD-2
+- POL-1 and POL-2 can be done in parallel
+- Testing should happen throughout, not just in INT-2
